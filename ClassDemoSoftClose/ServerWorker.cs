@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ClassDemoSoftClose
@@ -9,8 +10,7 @@ namespace ClassDemoSoftClose
     public class ServerWorker
     {
         private const int PORT = 7;
-
-
+        
         public ServerWorker()
         {
         }
@@ -19,12 +19,12 @@ namespace ClassDemoSoftClose
         {
             TcpListener listener = new TcpListener(IPAddress.Any, PORT);
             listener.Start();
-            Console.WriteLine("Server startet");
+            Console.WriteLine("Server started");
 
             while (true)
             {
                 TcpClient client = listener.AcceptTcpClient();
-                Console.WriteLine("Client comming in");
+                Console.WriteLine("Client incoming");
                 Console.WriteLine($"remote (ip,port) = ({client.Client.RemoteEndPoint})");
                 Task.Run(() =>
                     {
@@ -34,8 +34,7 @@ namespace ClassDemoSoftClose
                 );
             }
 
-
-
+            Console.WriteLine("Server Stopped");
         }
 
         private void DoOneClient(TcpClient sock)
