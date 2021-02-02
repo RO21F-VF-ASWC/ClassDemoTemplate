@@ -1,4 +1,5 @@
 ﻿using System;
+using MyLib;
 
 namespace ClassDemoSoftClose
 {
@@ -6,6 +7,8 @@ namespace ClassDemoSoftClose
     {
         static void Main(string[] args)
         {
+            
+
             ServerWorker worker = new ServerWorker();
             worker.Start();
 

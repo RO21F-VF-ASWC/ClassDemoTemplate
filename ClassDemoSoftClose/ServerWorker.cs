@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -11,6 +12,7 @@ namespace ClassDemoSoftClose
     {
         private const int PORT = 7;
         private bool STOP = false;
+        private List<Task> tasks = new List<Task>();
         
         public ServerWorker()
         {
@@ -32,12 +34,12 @@ namespace ClassDemoSoftClose
                     TcpClient client = listener.AcceptTcpClient();
                     Console.WriteLine("Client incoming");
                     Console.WriteLine($"remote (ip,port) = ({client.Client.RemoteEndPoint})");
-                    Task.Run(() =>
+                    tasks.Add(Task.Run(() =>
                         {
                             TcpClient tmpClient = client;
                             DoOneClient(client);
                         }
-                    );
+                    ));
                 }
                 else
                 {
@@ -45,6 +47,7 @@ namespace ClassDemoSoftClose
                 }
             }
 
+            Task.WaitAll(tasks.ToArray());
             Console.WriteLine("Server Stopped");
         }
 
