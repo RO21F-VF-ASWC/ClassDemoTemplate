@@ -8,7 +8,7 @@ namespace ClassDemoTemplate
         static void Main(string[] args)
         {
             //AbstractADT adt = new ListADT();
-            //AbstractADT adt = new SetADT();
+            AbstractADT adt = new SetADT();
 
             adt.Add("Peter");
             adt.Add("Anders");

@@ -10,13 +10,13 @@ namespace ClassDemoTemplate
 
         public AbstractADT()
         {
-            _myList = CreateList(); // use the abstract method
+            _myList = CreateCollection(); // use the abstract method
         }
 
         //
         // Template method - to be overrided and will differ from subclass to subclass
         //
-        protected abstract ICollection<string> CreateList();
+        protected abstract ICollection<string> CreateCollection();
 
 
         //
