@@ -10,6 +10,7 @@ namespace ClassDemoSoftClose
     public class ServerWorker
     {
         private const int PORT = 7;
+        private bool STOP = false;
         
         public ServerWorker()
         {
@@ -21,17 +22,27 @@ namespace ClassDemoSoftClose
             listener.Start();
             Console.WriteLine("Server started");
 
-            while (true)
+            Task.Run(StopServer); // starter stop server
+            Console.WriteLine("Stop server started");
+
+            while (!STOP)
             {
-                TcpClient client = listener.AcceptTcpClient();
-                Console.WriteLine("Client incoming");
-                Console.WriteLine($"remote (ip,port) = ({client.Client.RemoteEndPoint})");
-                Task.Run(() =>
-                    {
-                        TcpClient tmpClient = client;
-                        DoOneClient(client);
-                    }
-                );
+                if (listener.Pending())
+                {
+                    TcpClient client = listener.AcceptTcpClient();
+                    Console.WriteLine("Client incoming");
+                    Console.WriteLine($"remote (ip,port) = ({client.Client.RemoteEndPoint})");
+                    Task.Run(() =>
+                        {
+                            TcpClient tmpClient = client;
+                            DoOneClient(client);
+                        }
+                    );
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
             }
 
             Console.WriteLine("Server Stopped");
@@ -51,6 +62,16 @@ namespace ClassDemoSoftClose
             }
             
 
+        }
+
+        private void StopServer()
+        {
+            TcpListener listener = new TcpListener(IPAddress.Any, PORT+1);
+            listener.Start();
+            TcpClient client = listener.AcceptTcpClient();
+            // todo check at bruger er ok 
+
+            STOP = true;
         }
     }
 }
